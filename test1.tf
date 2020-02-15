@@ -1,6 +1,6 @@
 provider "aws" {
 access_key = "AKIAWKKCMNNPPEE2NONT"
-secret_key = "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"
+secret_key = "SECRET_KEY"
 region = "us-east-1"
 }
 
@@ -9,7 +9,7 @@ resource "aws_instance" "my_Ubuntu" {
   count= 1
   ami="ami-0400a1104d5b9caa1"
   instance_type="t2.micro"
-  vpc_security_group_ids = [aws_security_group.security_group.id] # "sg-11111111"
+  vpc_security_group_ids = [aws_security_group.security_group.id]
    
   tags={
     Name= "My Ubuntu server"
@@ -17,21 +17,12 @@ resource "aws_instance" "my_Ubuntu" {
     Project="Terraform tutorial "
   }
   # bootraping  
-  #remove all spaces and //comments before run 
-  user_data = <<EOF
-#!/bin/bash
-yum -y update                 //update linux
-yum -y install httpd          //install apache web server
-myip=`crul http://169.254.169.254/latest/meta-data/local-ipv4` //get id from aws
-echo "<h2> Webserver with IP: $myip</h2><br>Build by Terraform!" > /var/www/html/index.html  
-sudo service httpd start      //start apache web server
-chkconfig httpd on            //evry run start apache server
-EOF
+   user_data = file("user_data.sh")
 }
 resource "aws_security_group" "security_group" {
   name        = "WebServer Security Group "
   description = "Allow TLS inbound traffic"
-  vpc_id      = "${aws_vpc.main.id}"
+ # vpc_id      = "${aws_vpc.main.id}"
 
   ingress { # incoming traffic to server
     # TLS (change to whatever ports you need)
