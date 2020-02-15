@@ -17,14 +17,29 @@ resource "aws_instance" "my_Ubuntu" {
     Project="Terraform tutorial "
   }
   # bootraping  
-   user_data = file("user_data.sh")
+   #user_data = file("user_data.sh")
+   user_data = templatefile("user_data.sh.tpl",{
+     username="ildevelop"
+     names=["John", "Bob", "Max"]
+   })
 }
 resource "aws_security_group" "security_group" {
   name        = "WebServer Security Group "
   description = "Allow TLS inbound traffic"
  # vpc_id      = "${aws_vpc.main.id}"
 
-  ingress { # incoming traffic to server
+# create dynamic ingress 
+  
+dynamic "ingress" { 
+   for_each = ["80","443","8080"]
+   content {
+    from_port   = ingress.value
+    to_port     = ingress.value
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+   }
+  }
+  /* ingress { # incoming traffic to server
     # TLS (change to whatever ports you need)
     from_port   = 80
     to_port     = 80
@@ -32,13 +47,7 @@ resource "aws_security_group" "security_group" {
     # Please restrict your ingress to only necessary IPs and ports.
     # Opening to 0.0.0.0/0 can lead to security vulnerabilities.
     cidr_blocks = ["0.0.0.0/0"] # all connections
-  }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  } */
 
   egress { # outcoming traffic from server
     from_port       = 0

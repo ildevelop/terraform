@@ -35,3 +35,11 @@ destroy all instances from `.tf` file
 ```
 terraform destroy
 ```
+
+### terminal terraform
+
+for testing yours function
+
+```
+terraform console
+```
