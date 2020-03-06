@@ -22,7 +22,18 @@ resource "aws_instance" "my_Ubuntu" {
      username="ildevelop"
      names=["John", "Bob", "Max"]
    })
+   //  lifecycle if one of ignore_data change not need update/create new instance 
+   lifecycle {
+      ignore-changes = ["ami","user_data"],
+      create_before_destroy = true   // create new one and after destroy the old instance
+  }  
 }
+ 
+ // create elastic IP address for my_Ubuntu services (evrey upadte will same IP)
+resource "aws_eip", "my_static_ip" {
+  instance= aws_instance.my_Ubuntu.id
+}
+
 resource "aws_security_group" "security_group" {
   name        = "WebServer Security Group "
   description = "Allow TLS inbound traffic"
