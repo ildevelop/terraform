@@ -15,6 +15,14 @@ search from `.tf` files provider and upload all instances
 ```
 terraform init
 ```
+### Listing the currently running environments is as easy as
+```
+terraform workspace list
+```
+### In order to create a workspace
+```
+terraform workspace new {NAME}
+``` 
 
 ### search plan (check instances)
 
