@@ -27,10 +27,19 @@ resource "aws_instance" "my_Ubuntu" {
       ignore-changes = ["ami","user_data"],
       create_before_destroy = true   // create new one and after destroy the old instance
   }  
+
+  #add dependence (which resource would start first)
+  depends_on = [aws_instance.my_server_db]
+}
+
+resource "aws_instance" "my_server_db" {
+  ami =           "ami-03a71cec707bfc1dd"
+  instance_type = "t3.micro"
+  vpc_security_group_ids=[aws_security_group.security_group.id]
 }
  
  // create elastic IP address for my_Ubuntu services (evrey upadte will same IP)
-resource "aws_eip", "my_static_ip" {
+resource "aws_eip" "my_static_ip" {
   instance= aws_instance.my_Ubuntu.id
 }
 
