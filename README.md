@@ -60,6 +60,12 @@ destroy all instances from `.tf` file
 terraform destroy
 ```
 
+### update to specific version of Terraform 
+
+```
+tfswitch 0.13.5
+```
+
 ### terminal terraform
 
 for testing yours function
