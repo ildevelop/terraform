@@ -58,7 +58,9 @@ destroy all instances from `.tf` file
 
 ```
 terraform destroy
+terraform delete
 ```
+
 
 ### update to specific version of Terraform 
 
