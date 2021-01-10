@@ -57,8 +57,10 @@ terraform apply
 destroy all instances from `.tf` file
 
 ```
+terraform workspace select ENV
 terraform destroy
-terraform delete
+terraform workspace select default // or any other env
+terraform delete ENV
 ```
 
 
